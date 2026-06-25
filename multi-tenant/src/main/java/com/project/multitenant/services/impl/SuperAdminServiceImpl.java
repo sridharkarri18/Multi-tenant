@@ -32,4 +32,14 @@ public class SuperAdminServiceImpl implements SuperAdminService {
                 .map(OrganizationMapper::toResponse)
                 .collect(Collectors.toList());
     }
+
+    @Autowired
+    private com.project.multitenant.repositories.UserRepository userRepository;
+
+    @Override
+    public List<com.project.multitenant.dto.UserResponse> getUsersByOrganization(Long orgId) {
+        return userRepository.findByOrganizationId(orgId).stream()
+                .map(u -> new com.project.multitenant.dto.UserResponse(u.getId(), u.getEmail(), u.getRole().name()))
+                .collect(Collectors.toList());
+    }
 }

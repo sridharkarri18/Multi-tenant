@@ -7,6 +7,6 @@ import java.util.List;
 public interface OrgAdminService {
     FeatureFlagResponse createFlag(Long organizationId, FeatureFlagRequest request);
     FeatureFlagResponse updateFlag(Long organizationId, Long flagId, FeatureFlagRequest request);
-    void deleteFlag(Long organizationId, Long flagId);
+    void deleteFlag(Long organizationId, String featureKey);
     List<FeatureFlagResponse> getFlags(Long organizationId);
 }

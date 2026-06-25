@@ -27,4 +27,9 @@ public class SuperAdminController {
     public ResponseEntity<List<OrganizationResponse>> getAllOrganizations() {
         return ResponseEntity.ok(superAdminService.getAllOrganizations());
     }
+
+    @GetMapping("/{orgId}/users")
+    public ResponseEntity<List<com.project.multitenant.dto.UserResponse>> getUsersByOrg(@PathVariable Long orgId) {
+        return ResponseEntity.ok(superAdminService.getUsersByOrganization(orgId));
+    }
 }

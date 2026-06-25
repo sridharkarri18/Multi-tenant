@@ -64,7 +64,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/user/**").hasAnyRole("END_USER", "ORG_ADMIN")
                 .requestMatchers("/api/flags/**").permitAll()
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                .requestMatchers("/", "/index.html", "/style.css", "/app.js", "/*.ico", "/**/*.png", "/**/*.jpg").permitAll()
+                .requestMatchers("/", "/index.html", "/style.css", "/app.js", "/*.ico").permitAll()
                 .anyRequest().authenticated()
             );
 

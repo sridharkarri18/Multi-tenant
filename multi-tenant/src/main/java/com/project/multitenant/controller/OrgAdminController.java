@@ -35,11 +35,11 @@ public class OrgAdminController {
         return ResponseEntity.ok(orgAdminService.updateFlag(currentUser.getOrganizationId(), id, request));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{featureKey}")
     public ResponseEntity<Void> deleteFlag(
             @AuthenticationPrincipal UserPrincipal currentUser,
-            @PathVariable Long id) {
-        orgAdminService.deleteFlag(currentUser.getOrganizationId(), id);
+            @PathVariable String featureKey) {
+        orgAdminService.deleteFlag(currentUser.getOrganizationId(), featureKey);
         return ResponseEntity.noContent().build();
     }
 

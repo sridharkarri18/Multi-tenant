@@ -55,8 +55,8 @@ public class OrgAdminServiceImpl implements OrgAdminService {
     }
 
     @Override
-    public void deleteFlag(Long organizationId, Long flagId) {
-        FeatureFlag flag = featureFlagRepository.findByIdAndOrganizationId(flagId, organizationId)
+    public void deleteFlag(Long organizationId, String featureKey) {
+        FeatureFlag flag = featureFlagRepository.findByFeatureKeyAndOrganizationId(featureKey, organizationId)
                 .orElseThrow(() -> new ResourceNotFoundException("Feature Flag not found or does not belong to your organization"));
         featureFlagRepository.delete(flag);
     }

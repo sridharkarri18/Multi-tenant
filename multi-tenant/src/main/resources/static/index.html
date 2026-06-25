@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feature Flag Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <!-- LOGIN SCREEN -->
+    <div id="login-screen" class="glass-container active">
+        <h2>Welcome Back</h2>
+        <p class="subtitle">Log in to check your feature flags.</p>
+        
+        <form id="login-form">
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" required placeholder="user@netflix.com">
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required placeholder="••••••••">
+            </div>
+            <button type="submit" class="btn-primary">Sign In</button>
+        </form>
+        <div id="login-error" class="error-msg"></div>
+    </div>
+
+    <!-- DASHBOARD SCREEN -->
+    <div id="dashboard-screen" class="glass-container hidden">
+        <header class="dashboard-header">
+            <div>
+                <h2>Your Dashboard</h2>
+                <p id="user-info" class="subtitle">Logged in as: ...</p>
+            </div>
+            <button id="logout-btn" class="btn-secondary">Log Out</button>
+        </header>
+
+        <!-- SUPER ADMIN ONLY: Master Control Area -->
+        <div id="super-admin-area" class="super-admin-highlight hidden">
+            <h3>👑 Super Admin Control Panel</h3>
+            
+            <div class="tabs">
+                <button id="tab-org" class="tab-btn active-tab">Create Organization</button>
+                <button id="tab-user" class="tab-btn">Manage Users</button>
+            </div>
+
+            <!-- Tab 1: Create Organization -->
+            <div id="view-org" class="tab-content active-content">
+                <div class="input-row">
+                    <input type="text" id="create-org-input" placeholder="Organization Name (e.g. Netflix)">
+                    <button id="create-org-btn" class="btn-primary">Create Org</button>
+                </div>
+                <div id="org-result" class="result-box hidden" style="margin-top: 15px;"></div>
+            </div>
+
+            <!-- Tab 2: Provision Users -->
+            <div id="view-user" class="tab-content hidden">
+                <div class="input-group">
+                    <label>Select Organization</label>
+                    <select id="user-org-select" class="dropdown-select">
+                        <option value="">Loading organizations...</option>
+                    </select>
+                </div>
+
+                <!-- Show existing users -->
+                <div id="org-user-list-container" class="hidden" style="margin-bottom: 20px;">
+                    <label>Existing Users (<span id="org-user-count">0</span>)</label>
+                    <div id="org-user-list" class="user-list-box"></div>
+                </div>
+
+                <hr style="border-color: var(--glass-border); margin: 20px 0;">
+                <label>Provision New User</label>
+
+                <div class="input-group">
+                    <select id="user-role-select" class="dropdown-select">
+                        <option value="ORG_ADMIN">Organization Admin</option>
+                        <option value="END_USER">End User</option>
+                    </select>
+                </div>
+                <div class="input-row" style="align-items: stretch;">
+                    <input type="email" id="user-email-input" placeholder="User Email">
+                    <input type="password" id="user-password-input" placeholder="Password">
+                </div>
+                <button id="create-user-btn" class="btn-primary" style="margin-top: 15px;">Create User</button>
+                <div id="user-result" class="result-box hidden" style="margin-top: 15px;"></div>
+            </div>
+        </div>
+
+        <!-- ORG ADMIN ONLY: Manage Organization -->
+        <div id="org-admin-area" class="org-admin-highlight hidden">
+            <h3>🛠️ Organization Management (Admin)</h3>
+            
+            <div class="tabs" style="margin-bottom: 15px;">
+                <button id="tab-flags" class="tab-btn active-tab" style="border-color: var(--primary); color: var(--primary);">Feature Flags</button>
+                <button id="tab-org-users" class="tab-btn">Provision Users</button>
+            </div>
+
+            <!-- Org Admin: Flags -->
+            <div id="view-flags" class="tab-content active-content">
+                <div style="margin-bottom: 20px;">
+                    <div class="input-row">
+                        <input type="text" id="create-key-input" placeholder="Flag to Create (e.g. new-ui)">
+                        <button id="create-flag-btn" class="btn-primary">Create</button>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="input-row">
+                        <input type="text" id="delete-key-input" placeholder="Flag to Delete (e.g. old-ui)">
+                        <button id="delete-flag-btn" class="btn-primary" style="background: var(--error);">Delete</button>
+                    </div>
+                </div>
+
+                <div id="admin-result" class="result-box hidden"></div>
+            </div>
+
+            <!-- Org Admin: Users -->
+            <div id="view-org-users" class="tab-content hidden">
+                <p class="subtitle" style="margin-bottom: 15px;">Create an End User for your organization.</p>
+                <div class="input-row" style="align-items: stretch;">
+                    <input type="email" id="org-admin-user-email" placeholder="User Email">
+                    <input type="password" id="org-admin-user-password" placeholder="Password">
+                </div>
+                <button id="org-admin-create-user-btn" class="btn-primary" style="margin-top: 15px;">Create End User</button>
+                <div id="org-admin-user-result" class="result-box hidden" style="margin-top: 15px;"></div>
+            </div>
+        </div>
+
+        <div class="feature-checker">
+            <h3>Check a Feature Flag</h3>
+            <div class="input-row">
+                <input type="text" id="feature-key-input" placeholder="e.g. enable-dark-mode">
+                <button id="check-flag-btn" class="btn-primary">Evaluate</button>
+            </div>
+            <div id="flag-result" class="result-box hidden">
+                <!-- Result will be injected here -->
+            </div>
+        </div>
+
+        <!-- This section will only appear if a dark-mode flag is true -->
+        <div id="dynamic-feature-area" class="feature-preview hidden">
+            <h4>✨ New Feature Unlocked! ✨</h4>
+            <p>Because the feature flag was TRUE, you can now see this secret premium area.</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
